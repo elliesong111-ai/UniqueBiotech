@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeBackButtons();
   initializeScrollAnimations();
   initializeStatBars();
+  initializeToolkit();
   
   // 设置默认内容显示
   const defaultContent = document.getElementById('default-content');
@@ -186,6 +187,223 @@ function initializeStatBars() {
     }, { threshold: 0.1 });
     
     observer.observe(bar);
+  });
+}
+
+// 互动反馈处理（仅本地存储）
+function handleInteraction(topic, action) {
+  const storageKey = `interaction_${topic}_${action}`;
+  const current = parseInt(localStorage.getItem(storageKey) || '0', 10);
+  localStorage.setItem(storageKey, String(current + 1));
+
+  const feedbackEl = document.getElementById(`${topic}-feedback`);
+  if (feedbackEl) {
+    feedbackEl.textContent = '已收到你的观点，感谢参与！';
+  }
+}
+
+// 头部快速投票
+function handleQuickPoll(dimension) {
+  showDimensionContent(dimension);
+
+  const feedbackEl = document.getElementById('quick-feedback');
+  if (feedbackEl) {
+    feedbackEl.textContent = '感谢你的选择，已为你跳转到相关内容。';
+  }
+}
+
+// 风味工具包
+function initializeToolkit() {
+  const evaluateBtn = document.getElementById('toolkit-evaluate');
+  const resetBtn = document.getElementById('toolkit-reset');
+  const copyBtn = document.getElementById('toolkit-copy');
+  const saveBtn = document.getElementById('toolkit-save');
+  const resultBox = document.getElementById('toolkit-result');
+  const tasteBtn = document.getElementById('taste-evaluate');
+  const channelBtn = document.getElementById('channel-evaluate');
+  const costBtn = document.getElementById('cost-evaluate');
+
+  if (!evaluateBtn || !resultBox) {
+    return;
+  }
+
+  const checkboxes = Array.from(document.querySelectorAll('.checklist input[type="checkbox"]'));
+
+  const updateResult = () => {
+    const total = checkboxes.length;
+    const checked = checkboxes.filter(cb => cb.checked).length;
+    const percent = Math.round((checked / total) * 100);
+
+    let stage = '基础阶段';
+    let suggestions = [
+      '先建立原奶风味检测与微生物检测的固定频次。',
+      '优先把饲料配比与热处理参数做成可追溯记录。',
+      '建立一套简单的内部品鉴记录表。'
+    ];
+
+    if (checked >= 4 && checked <= 6) {
+      stage = '进阶阶段';
+      suggestions = [
+        '每月复盘一次风味波动原因（饲料/温度/运输）。',
+        '完善关键工序 SOP 与人员培训，减少香气波动。',
+        '建立冷链温度偏差的纠偏机制。'
+      ];
+    }
+
+    if (checked >= 7) {
+      stage = '成熟阶段';
+      suggestions = [
+        '建立原料风味评分与成品风味对应关系。',
+        '为不同产品制定“风味目标曲线”。',
+        '用“清爽/黄油/坚果/发酵”等风味标签做传播。'
+      ];
+    }
+
+    resultBox.innerHTML = `
+      <p><strong>完成度：</strong>${checked}/${total}（${percent}%）</p>
+      <p><strong>阶段判断：</strong>${stage}</p>
+      <p><strong>行动建议：</strong></p>
+      <ul>
+        ${suggestions.map(item => `<li>${item}</li>`).join('')}
+      </ul>
+    `;
+  };
+
+  evaluateBtn.addEventListener('click', updateResult);
+
+  resetBtn?.addEventListener('click', () => {
+    checkboxes.forEach(cb => { cb.checked = false; });
+    resultBox.innerHTML = '<p>已清空，请重新选择后生成结果。</p>';
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    const text = resultBox.innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+      resultBox.insertAdjacentHTML('beforeend', '<p>✅ 已复制到剪贴板</p>');
+    } catch (err) {
+      resultBox.insertAdjacentHTML('beforeend', '<p>⚠️ 复制失败，请手动复制</p>');
+    }
+  });
+
+  saveBtn?.addEventListener('click', () => {
+    localStorage.setItem('flavor_toolkit_result', resultBox.innerText);
+    resultBox.insertAdjacentHTML('beforeend', '<p>💾 已保存到本地</p>');
+  });
+
+  tasteBtn?.addEventListener('click', () => {
+    const scene = document.getElementById('taste-scene')?.value || 'daily';
+    const focus = document.getElementById('taste-focus')?.value || 'fresh';
+    const supply = document.getElementById('taste-supply')?.value || 'local';
+    const usp = document.getElementById('taste-usp')?.value || 'taste';
+    const output = document.getElementById('taste-result');
+
+    const sceneMap = {
+      daily: '直接饮用',
+      coffee: '咖啡/茶饮',
+      baking: '烘焙/料理',
+      fitness: '低脂/控糖'
+    };
+    const focusMap = {
+      fresh: '清爽干净',
+      protein: '顺滑厚度',
+      lowfat: '轻盈低脂',
+      price: '稳定一致'
+    };
+    const supplyMap = {
+      local: '冷藏短链',
+      cold: '全程冷链',
+      shelf: '常温储存',
+      mix: '混合模式'
+    };
+    const uspMap = {
+      taste: '黄油奶香',
+      safe: '清新奶香',
+      green: '发酵香',
+      local: '坚果香'
+    };
+
+    const positioning = `主打 ${sceneMap[scene]} 场景，聚焦 ${focusMap[focus]}，采用 ${supplyMap[supply]} 方案。`;
+    const oneLiner = `一句话描述：${uspMap[usp]} + ${sceneMap[scene]}需求，强调风味稳定。`;
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>风味方向：</strong>${positioning}</p>
+        <p><strong>建议重点：</strong>围绕目标风味做 1-2 个稳定配方。</p>
+        <p><strong>${oneLiner}</strong></p>
+      `;
+    }
+  });
+
+  channelBtn?.addEventListener('click', () => {
+    const city = document.getElementById('channel-city')?.value || 'tier2';
+    const audience = document.getElementById('channel-audience')?.value || 'family';
+    const budget = document.getElementById('channel-budget')?.value || 'mid';
+    const output = document.getElementById('channel-result');
+
+    const flavorSets = {
+      tier1: ['清爽型风味', '轻度奶香', '冷藏表现'],
+      tier2: ['均衡型风味', '轻度熟香', '常温稳定'],
+      tier3: ['酸香/发酵风味', '柔和口感', '菌种突出'],
+      county: ['熟成风味', '坚果香', '质地更紧实']
+    };
+
+    const audienceBoost = {
+      family: ['清爽干净', '低异味'],
+      young: ['黄油奶香', '更浓郁'],
+      elder: ['柔和稳定', '不过刺激'],
+      b2b: ['发酵香', '可配餐']
+    };
+
+    const budgetTips = {
+      low: '优先保证基础风味稳定，再逐步加深香气。',
+      mid: '可以调整脂肪比例与热处理参数做风味优化。',
+      high: '可尝试多款菌种与熟成方案，形成差异化。'
+    };
+
+    const base = flavorSets[city] || flavorSets.tier2;
+    const extra = audienceBoost[audience] || [];
+    const channels = Array.from(new Set([...base, ...extra])).slice(0, 5);
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>推荐风味组合：</strong>${channels.join('、')}</p>
+        <p><strong>优先级：</strong>先稳定基础风味，再做强化与延展。</p>
+        <p><strong>优化建议：</strong>${budgetTips[budget]}</p>
+      `;
+    }
+  });
+
+  costBtn?.addEventListener('click', () => {
+    const fat = parseFloat(document.getElementById('cost-cows')?.value || '0');
+    const temp = parseFloat(document.getElementById('cost-tonnage')?.value || '0');
+    const product = document.getElementById('cost-product')?.value || 'fresh';
+    const pain = document.getElementById('cost-pain')?.value || 'energy';
+    const output = document.getElementById('cost-result');
+
+    const productTips = {
+      fresh: '保持巴氏温度与时间稳定，保留清爽香。',
+      uht: '注意高温带来的熟香与焦糖感。',
+      yogurt: '优化菌种与发酵时长，增强层次。',
+      mix: '针对熟成时间与盐度做更细分控制。'
+    };
+    const painTips = {
+      energy: '提升脂肪比例或优化热处理，增加奶香。',
+      loss: '减少过度稀释，关注蛋白与脂肪平衡。',
+      logistics: '排查饲料与冷链异味来源。',
+      labor: '建立关键参数记录，减少批次波动。'
+    };
+    const fatTip = fat >= 4.0 ? '脂肪偏高，奶香更浓。' : fat >= 3.5 ? '脂肪适中，风味平衡。' : '脂肪偏低，奶香可能较弱。';
+    const tempTip = temp >= 90 ? '温度偏高，熟香更明显。' : temp >= 72 ? '温度适中，兼顾香气与安全。' : temp > 0 ? '温度偏低，香气更接近原奶。' : '请填写合理的热处理温度。';
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>脂肪判断：</strong>${fatTip}</p>
+        <p><strong>温度判断：</strong>${tempTip}</p>
+        <p><strong>产品侧重点：</strong>${productTips[product]}</p>
+        <p><strong>优先优化项：</strong>${painTips[pain]}</p>
+      `;
+    }
   });
 }
 
