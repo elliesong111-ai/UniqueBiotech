@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeScrollAnimations();
   initializeStatBars();
   initializeToolkit();
+  initializeBusinessToolkit();
   
   // 设置默认内容显示
   const defaultContent = document.getElementById('default-content');
@@ -400,6 +401,130 @@ function initializeToolkit() {
       output.innerHTML = `
         <p><strong>脂肪判断：</strong>${fatTip}</p>
         <p><strong>温度判断：</strong>${tempTip}</p>
+        <p><strong>产品侧重点：</strong>${productTips[product]}</p>
+        <p><strong>优先优化项：</strong>${painTips[pain]}</p>
+      `;
+    }
+  });
+}
+
+// 中小乳企经营工具
+function initializeBusinessToolkit() {
+  const tasteBtn = document.getElementById('biz-taste-evaluate');
+  const channelBtn = document.getElementById('biz-channel-evaluate');
+  const costBtn = document.getElementById('biz-cost-evaluate');
+
+  tasteBtn?.addEventListener('click', () => {
+    const scene = document.getElementById('biz-taste-scene')?.value || 'daily';
+    const focus = document.getElementById('biz-taste-focus')?.value || 'fresh';
+    const supply = document.getElementById('biz-taste-supply')?.value || 'local';
+    const usp = document.getElementById('biz-taste-usp')?.value || 'taste';
+    const output = document.getElementById('biz-taste-result');
+
+    const sceneMap = {
+      daily: '家庭日常',
+      coffee: '咖啡/茶饮',
+      baking: '烘焙/餐饮',
+      fitness: '健身/控糖'
+    };
+    const focusMap = {
+      fresh: '新鲜口感',
+      protein: '高蛋白营养',
+      lowfat: '低脂低糖',
+      price: '性价比'
+    };
+    const supplyMap = {
+      local: '本地短链',
+      cold: '冷链配送',
+      shelf: '常温仓储',
+      mix: '混合模式'
+    };
+    const uspMap = {
+      taste: '香浓风味',
+      safe: '安全可追溯',
+      green: '低碳环保',
+      local: '产地本地故事'
+    };
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>定位方向：</strong>主打 ${sceneMap[scene]} 场景，聚焦 ${focusMap[focus]}，采用 ${supplyMap[supply]} 供应。</p>
+        <p><strong>产品建议：</strong>聚焦 1-2 个核心 SKU，避免过度分散。</p>
+        <p><strong>一句话卖点：</strong>${uspMap[usp]} + ${sceneMap[scene]}需求，强调稳定与可靠。</p>
+      `;
+    }
+  });
+
+  channelBtn?.addEventListener('click', () => {
+    const city = document.getElementById('biz-channel-city')?.value || 'tier2';
+    const audience = document.getElementById('biz-channel-audience')?.value || 'family';
+    const budget = document.getElementById('biz-channel-budget')?.value || 'mid';
+    const output = document.getElementById('biz-channel-result');
+
+    const channelSets = {
+      tier1: ['商超/精品店', '即时零售', '社区团购', '内容电商'],
+      tier2: ['商超/便利店', '社区团购', '本地生活平台', '母婴渠道'],
+      tier3: ['本地商超', '经销/批发', '社区团购', '校园/企事业'],
+      county: ['经销/批发', '乡镇商超', '团购/熟人渠道', '学校/食堂']
+    };
+
+    const audienceBoost = {
+      family: ['母婴渠道', '社区团购'],
+      young: ['即时零售', '内容电商'],
+      elder: ['社区团购', '本地商超'],
+      b2b: ['餐饮/茶饮直供', '经销批发']
+    };
+
+    const budgetTips = {
+      low: '优先做复购渠道与口碑传播，避免高投放。',
+      mid: '可做区域活动与本地内容投放，小步试错。',
+      high: '适合做品牌联名与渠道联合推广。'
+    };
+
+    const base = channelSets[city] || channelSets.tier2;
+    const extra = audienceBoost[audience] || [];
+    const channels = Array.from(new Set([...base, ...extra])).slice(0, 5);
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>推荐渠道组合：</strong>${channels.join('、')}</p>
+        <p><strong>优先级：</strong>先打通 2-3 个核心渠道，再逐步扩展。</p>
+        <p><strong>预算策略：</strong>${budgetTips[budget]}</p>
+      `;
+    }
+  });
+
+  costBtn?.addEventListener('click', () => {
+    const cows = parseFloat(document.getElementById('biz-cost-cows')?.value || '0');
+    const tonnage = parseFloat(document.getElementById('biz-cost-tonnage')?.value || '0');
+    const product = document.getElementById('biz-cost-product')?.value || 'fresh';
+    const pain = document.getElementById('biz-cost-pain')?.value || 'energy';
+    const output = document.getElementById('biz-cost-result');
+
+    const scale = cows >= 800 || tonnage >= 60 ? '较大规模' : cows >= 300 || tonnage >= 20 ? '中等规模' : '小规模';
+    const productTips = {
+      fresh: '优先控制冷链损耗与终端周转。',
+      uht: '关注能耗与包装成本，提升产线效率。',
+      yogurt: '关注菌种与发酵损耗控制。',
+      mix: '建立多 SKU 排产与库存周转机制。'
+    };
+    const painTips = {
+      energy: '建议先做设备能耗盘点与峰谷电优化。',
+      loss: '重点降低损耗与返工率，强化 SOP。',
+      logistics: '优化配送路线与合作运力，提高满载率。',
+      labor: '通过流程优化与设备改造降低人效成本。'
+    };
+
+    const budgetRange = scale === '较大规模'
+      ? '建议将1.5%-3%的营收用于设备与流程优化'
+      : scale === '中等规模'
+        ? '建议将1%-2%营收用于关键环节优化'
+        : '建议先做低成本优化（SOP/维护/损耗）';
+
+    if (output) {
+      output.innerHTML = `
+        <p><strong>规模判断：</strong>${scale}</p>
+        <p><strong>预算建议：</strong>${budgetRange}</p>
         <p><strong>产品侧重点：</strong>${productTips[product]}</p>
         <p><strong>优先优化项：</strong>${painTips[pain]}</p>
       `;

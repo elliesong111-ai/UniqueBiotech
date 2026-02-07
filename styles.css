@@ -122,6 +122,61 @@ body {
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
+.hero-disclaimer {
+  margin: 0 auto 1.5rem;
+  max-width: 520px;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.hero-poll {
+  margin: 0 auto 2rem;
+  max-width: 680px;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.hero-poll-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.hero-poll-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.quick-btn {
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quick-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hero-poll-feedback {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
 .scroll-indicator {
   display: flex;
   flex-direction: column;
@@ -177,6 +232,125 @@ body {
   color: var(--text-light);
   margin-bottom: 3rem;
   font-size: 1.1rem;
+}
+
+.toolkit-section {
+  padding: 80px 20px;
+  background: var(--bg-white);
+}
+
+.toolkit-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+}
+
+.toolkit-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+.toolkit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.toolkit-grid-extended {
+  margin-top: 2.5rem;
+}
+
+.toolkit-card {
+  background: var(--bg-light);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
+}
+
+.toolkit-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.toolkit-form label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.toolkit-form select,
+.toolkit-form input {
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+}
+
+.toolkit-form input:focus,
+.toolkit-form select:focus {
+  outline: 2px solid rgba(74, 144, 226, 0.4);
+  border-color: rgba(74, 144, 226, 0.8);
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.checklist label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.98rem;
+  color: var(--text-dark);
+}
+
+.checklist input {
+  margin-top: 0.2rem;
+}
+
+.toolkit-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+
+.ghost-btn {
+  border: 1px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ghost-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.result-box {
+  margin-top: 1rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  border-left: 4px solid var(--primary-color);
+  min-height: 140px;
+}
+
+.toolkit-note {
+  margin-top: 0.75rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
 }
 
 .dimensions-grid {
@@ -506,6 +680,47 @@ body {
   font-size: 0.9rem;
 }
 
+.interactive-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: rgba(74, 144, 226, 0.08);
+  border: 1px dashed rgba(74, 144, 226, 0.4);
+}
+
+.interactive-section h4 {
+  margin-bottom: 0.5rem;
+}
+
+.interactive-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.interactive-btn {
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactive-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.interactive-feedback {
+  margin-top: 0.8rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
 /* 系统循环图 */
 .system-diagram {
   margin-top: 2rem;
@@ -639,6 +854,18 @@ body {
   line-height: 1.6;
 }
 
+.learning-box {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.learning-box h3 {
+  margin-bottom: 0.6rem;
+}
+
 /* 页脚 */
 .footer {
   background: var(--text-dark);
@@ -710,6 +937,14 @@ body {
     padding: 100px 20px 60px;
   }
 
+  .hero-poll {
+    padding: 1rem;
+  }
+
+  .hero-poll-buttons {
+    flex-direction: column;
+  }
+
   .section-title {
     font-size: 2rem;
   }
@@ -720,6 +955,10 @@ body {
 
   .stat-box {
     padding: 1rem;
+  }
+
+  .toolkit-card {
+    padding: 1.5rem;
   }
 }
 

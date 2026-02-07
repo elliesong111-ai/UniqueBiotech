@@ -59,6 +59,7 @@
         <a href="#intro">简介</a>
         <a href="#dimensions">风味六要素</a>
         <a href="#sme-toolkit">风味工具</a>
+        <a href="#sme-business-toolkit">经营工具</a>
       </div>
     </div>
   </nav>
@@ -599,6 +600,128 @@
           </div>
           <div class="result-box" id="cost-result">
             <p>填写信息后生成风味优化建议。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="toolkit-section" id="sme-business-toolkit">
+    <div class="container">
+      <h2>🧭 中小乳企经营互动工具</h2>
+      <p class="toolkit-subtitle">面向中小乳企主的“定位、渠道、成本”三大决策助手</p>
+
+      <div class="toolkit-grid toolkit-grid-extended">
+        <div class="toolkit-card">
+          <h3>🥛 口味偏好小测（用于产品定位）</h3>
+          <p class="toolkit-note">回答 4 个问题，生成可执行的产品定位建议。</p>
+          <div class="toolkit-form">
+            <label>你主要服务的消费场景？</label>
+            <select id="biz-taste-scene">
+              <option value="daily">家庭日常</option>
+              <option value="coffee">咖啡/茶饮</option>
+              <option value="baking">烘焙/餐饮</option>
+              <option value="fitness">健身/控糖</option>
+            </select>
+
+            <label>目标用户更在意什么？</label>
+            <select id="biz-taste-focus">
+              <option value="fresh">新鲜与口感</option>
+              <option value="protein">高蛋白与营养</option>
+              <option value="lowfat">低脂低糖</option>
+              <option value="price">性价比</option>
+            </select>
+
+            <label>你更擅长的供应方式？</label>
+            <select id="biz-taste-supply">
+              <option value="local">本地短链</option>
+              <option value="cold">冷链配送</option>
+              <option value="shelf">常温仓储</option>
+              <option value="mix">混合模式</option>
+            </select>
+
+            <label>你希望产品的核心卖点是？</label>
+            <select id="biz-taste-usp">
+              <option value="taste">香浓风味</option>
+              <option value="safe">安全可追溯</option>
+              <option value="green">低碳环保</option>
+              <option value="local">产地/本地故事</option>
+            </select>
+          </div>
+          <div class="toolkit-actions">
+            <button class="interactive-btn" id="biz-taste-evaluate">生成定位建议</button>
+          </div>
+          <div class="result-box" id="biz-taste-result">
+            <p>完成选择后会生成定位方向与一句话卖点。</p>
+          </div>
+        </div>
+
+        <div class="toolkit-card">
+          <h3>🧭 渠道选择模拟器</h3>
+          <p class="toolkit-note">输入城市与客群，生成渠道组合建议。</p>
+          <div class="toolkit-form">
+            <label>城市级别</label>
+            <select id="biz-channel-city">
+              <option value="tier1">一线/新一线</option>
+              <option value="tier2">二线</option>
+              <option value="tier3">三线及以下</option>
+              <option value="county">县域/乡镇</option>
+            </select>
+
+            <label>核心客群</label>
+            <select id="biz-channel-audience">
+              <option value="family">家庭与儿童</option>
+              <option value="young">年轻白领</option>
+              <option value="elder">中老年</option>
+              <option value="b2b">餐饮/茶饮/烘焙</option>
+            </select>
+
+            <label>营销预算区间（月）</label>
+            <select id="biz-channel-budget">
+              <option value="low">≤ 1万</option>
+              <option value="mid">1-5万</option>
+              <option value="high">≥ 5万</option>
+            </select>
+          </div>
+          <div class="toolkit-actions">
+            <button class="interactive-btn" id="biz-channel-evaluate">生成渠道组合</button>
+          </div>
+          <div class="result-box" id="biz-channel-result">
+            <p>点击按钮获取推荐渠道组合与优先级。</p>
+          </div>
+        </div>
+
+        <div class="toolkit-card">
+          <h3>💰 成本优化清单</h3>
+          <p class="toolkit-note">输入规模/产能，生成预算建议与优化优先级。</p>
+          <div class="toolkit-form">
+            <label>奶牛规模（头）</label>
+            <input type="number" id="biz-cost-cows" min="0" placeholder="例如 300">
+
+            <label>日处理原奶（吨）</label>
+            <input type="number" id="biz-cost-tonnage" min="0" placeholder="例如 20">
+
+            <label>产品类型</label>
+            <select id="biz-cost-product">
+              <option value="fresh">巴氏鲜奶</option>
+              <option value="uht">常温奶</option>
+              <option value="yogurt">酸奶/发酵</option>
+              <option value="mix">组合型</option>
+            </select>
+
+            <label>当前最大痛点</label>
+            <select id="biz-cost-pain">
+              <option value="energy">能耗偏高</option>
+              <option value="loss">损耗偏高</option>
+              <option value="logistics">物流成本</option>
+              <option value="labor">人工成本</option>
+            </select>
+          </div>
+          <div class="toolkit-actions">
+            <button class="interactive-btn" id="biz-cost-evaluate">生成预算建议</button>
+          </div>
+          <div class="result-box" id="biz-cost-result">
+            <p>填写信息后生成预算结构与优化优先级。</p>
           </div>
         </div>
       </div>
