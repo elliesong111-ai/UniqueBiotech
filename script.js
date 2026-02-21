@@ -775,7 +775,7 @@ async function callKimiAPI(message, apiKey) {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': window.location.href,
-      'X-Title': '奶香味科普网站'
+      'X-Title': 'Milk Flavor Guide'
     },
     body: JSON.stringify({
       model: 'moonshotai/kimi-k2.5',
