@@ -60,6 +60,7 @@
         <a href="#dimensions">风味六要素</a>
         <a href="#sme-toolkit">风味工具</a>
         <a href="#sme-business-toolkit">经营工具</a>
+        <a href="#ai-chat">AI 助手</a>
       </div>
     </div>
   </nav>
@@ -762,6 +763,41 @@
         <div class="learning-box">
           <h3>💡 如何提升奶香？</h3>
           <p>先从“稳定原料”与“可控工艺”入手：稳定饲料与健康管理、规范热处理与发酵流程，再用冷链与包装保证香气不流失。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI 助手聊天区域 -->
+  <section class="ai-chat-section" id="ai-chat">
+    <div class="container">
+      <h2>🤖 AI 奶香顾问</h2>
+      <p class="chat-subtitle">有关于牛奶风味的问题？让 AI 助手帮你解答</p>
+      
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-message assistant">
+            <div class="message-avatar">🤖</div>
+            <div class="message-content">
+              <p>你好！我是奶香顾问 AI（由 Kimi K2.5 驱动），可以回答关于牛奶和奶酪风味的问题。比如：</p>
+              <ul>
+                <li>为什么有些牛奶更香？</li>
+                <li>巴氏杀菌和超高温处理有什么区别？</li>
+                <li>如何选择适合咖啡的牛奶？</li>
+              </ul>
+              <p>直接输入你的问题吧！</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chat-input-container">
+          <input type="text" id="chat-input" placeholder="输入你的问题..." autocomplete="off">
+          <button id="chat-send" class="chat-send-btn">发送</button>
+        </div>
+        
+        <div class="chat-settings">
+          <label>API Key: <input type="password" id="api-key" placeholder="输入你的 OpenRouter API Key"></label>
+          <p class="chat-note">💡 已预填充 API Key，可直接使用。使用 Kimi K2.5 模型。</p>
         </div>
       </div>
     </div>

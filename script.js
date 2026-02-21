@@ -631,4 +631,169 @@ window.addEventListener('load', function() {
       card.style.transform = 'translateY(0)';
     }, index * 100);
   });
+  
+  // 初始化 AI 聊天功能
+  initializeAIChat();
 });
+
+// AI 聊天功能
+function initializeAIChat() {
+  const chatInput = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+  const messagesContainer = document.getElementById('chat-messages');
+  const apiKeyInput = document.getElementById('api-key');
+  
+  if (!chatInput || !sendBtn || !messagesContainer) return;
+  
+  // 从 localStorage 恢复 API Key，如果没有则使用默认值
+  const savedApiKey = localStorage.getItem('openrouter_api_key');
+  if (apiKeyInput) {
+    apiKeyInput.value = savedApiKey || DEFAULT_API_KEY;
+  }
+  
+  // 保存 API Key 到 localStorage
+  apiKeyInput?.addEventListener('change', function() {
+    localStorage.setItem('openrouter_api_key', this.value);
+  });
+  
+  // 发送消息
+  async function sendMessage() {
+    const message = chatInput.value.trim();
+    const apiKey = apiKeyInput?.value.trim();
+    
+    if (!message) return;
+    
+    if (!apiKey) {
+      addMessage('请先在下方输入你的 OpenRouter API Key。你可以在 https://openrouter.ai/keys 获取。', 'assistant');
+      return;
+    }
+    
+    // 添加用户消息
+    addMessage(message, 'user');
+    chatInput.value = '';
+    
+    // 显示加载动画
+    const loadingId = addTypingIndicator();
+    sendBtn.disabled = true;
+    
+    try {
+      const response = await callKimiAPI(message, apiKey);
+      removeTypingIndicator(loadingId);
+      addMessage(response, 'assistant');
+    } catch (error) {
+      removeTypingIndicator(loadingId);
+      addMessage(`抱歉，发生错误：${error.message}`, 'assistant');
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+  
+  // 点击发送按钮
+  sendBtn.addEventListener('click', sendMessage);
+  
+  // 按 Enter 发送
+  chatInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  
+  // 添加消息到聊天区域
+  function addMessage(content, role) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${role}`;
+    
+    const avatar = role === 'user' ? '👤' : '🤖';
+    
+    messageDiv.innerHTML = `
+      <div class="message-avatar">${avatar}</div>
+      <div class="message-content">
+        <p>${formatMessage(content)}</p>
+      </div>
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+  
+  // 格式化消息（支持简单 Markdown）
+  function formatMessage(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+  
+  // 添加打字指示器
+  function addTypingIndicator() {
+    const id = 'typing-' + Date.now();
+    const indicatorDiv = document.createElement('div');
+    indicatorDiv.className = 'chat-message assistant';
+    indicatorDiv.id = id;
+    indicatorDiv.innerHTML = `
+      <div class="message-avatar">🤖</div>
+      <div class="message-content">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    `;
+    messagesContainer.appendChild(indicatorDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    return id;
+  }
+  
+  // 移除打字指示器
+  function removeTypingIndicator(id) {
+    const indicator = document.getElementById(id);
+    if (indicator) {
+      indicator.remove();
+    }
+  }
+}
+
+// 默认 API Key
+const DEFAULT_API_KEY = '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';
+
+// 调用 OpenRouter API (Kimi K2.5)
+async function callKimiAPI(message, apiKey) {
+  const systemPrompt = `你是一个专业的牛奶和奶酪风味顾问 AI。你的职责是帮助用户理解：
+1. 牛奶和奶酪的奶香味从何而来
+2. 乳脂、蛋白结构、饲料、加工工艺、发酵熟成等因素如何影响风味
+3. 巴氏杀菌与超高温处理的区别
+4. 如何选择适合不同用途（直饮、咖啡、烘焙）的牛奶
+5. 风味控制和优化的建议
+
+请用简洁、专业但易懂的中文回答。如果用户的问题与牛奶/奶酪风味无关，礼貌地引导他们回到相关话题。`;
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': window.location.href,
+      'X-Title': '奶香味科普网站'
+    },
+    body: JSON.stringify({
+      model: 'moonshotai/kimi-k2.5',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: message }
+      ],
+      max_tokens: 4096,
+      temperature: 0.7,
+      top_p: 0.95
+    })
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `API 请求失败 (${response.status})`);
+  }
+  
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '抱歉，未能获取回复。';
+}
