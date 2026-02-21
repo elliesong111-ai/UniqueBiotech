@@ -773,9 +773,7 @@ async function callKimiAPI(message, apiKey) {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': window.location.href,
-      'X-Title': 'Milk Flavor Guide'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       model: 'moonshotai/kimi-k2.5',
